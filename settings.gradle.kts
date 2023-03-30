@@ -1,0 +1,1 @@
+rootProject.name = "Intellij-Plantuml-Generator-Plugin"
