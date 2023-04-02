@@ -1,5 +1,6 @@
 package com.hamba.intellijplantumlgeneratorplugin.main;
 
+import com.hamba.intellijplantumlgeneratorplugin.utils.DirectoryTreeNode;
 import com.intellij.codeInsight.completion.AllClassesGetter;
 import com.intellij.codeInsight.completion.PlainPrefixMatcher;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -8,12 +9,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static com.hamba.intellijplantumlgeneratorplugin.main.UmlGenerator.generateUmlClassDiagramSyntax;
 import static com.hamba.intellijplantumlgeneratorplugin.main.UmlGenerator.generateUmlRelationshipSyntax;
+import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.generateDirectoryTree;
 
 public class GenerateUmlAction extends AnAction {
     Map<PsiType, List<PsiType>> associations;
@@ -44,6 +46,12 @@ public class GenerateUmlAction extends AnAction {
         String interfacesUml = generateUmlRelationshipSyntax(allInterfaces, "..|>");
 
         String allRelationsUml = String.join("\n\n", Arrays.asList(dependenciesUml, associationsUml, inheritancesUml, interfacesUml));
+
+        DirectoryTreeNode directoryTree = generateDirectoryTree(project);
+
+        String classDiagramUml = generateUmlClassDiagramSyntax(directoryTree);
+
+        System.out.println(classDiagramUml);
 
         int a = 1;
     }

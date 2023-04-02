@@ -49,4 +49,8 @@ public class DirectoryTreeNode extends TreeNode<PsiDirectory> {
 
         return classNames;
     }
+
+    public List<PsiClass> getDirectoryClasses() {
+        return directoryClasses;
+    }
 }

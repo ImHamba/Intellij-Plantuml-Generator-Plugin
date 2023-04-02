@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TreeNode<T> {
-    protected List<TreeNode> children = new ArrayList<>();
+    protected List<TreeNode<T>> children = new ArrayList<>();
 
     protected T data;
     private TreeNode parent;
@@ -18,7 +18,7 @@ public class TreeNode<T> {
         children.add(newChild);
     }
 
-    public List<TreeNode> getChildren() {
+    public List<TreeNode<T>> getChildren() {
         return children;
     }
 
