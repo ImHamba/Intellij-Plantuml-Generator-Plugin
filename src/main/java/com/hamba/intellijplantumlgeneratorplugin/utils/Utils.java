@@ -1,12 +1,10 @@
 package com.hamba.intellijplantumlgeneratorplugin.utils;
 
+import com.intellij.lang.jvm.JvmModifier;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiFileFactory;
-import com.intellij.psi.PsiManager;
+import com.intellij.psi.*;
 import com.intellij.util.containers.ContainerUtil;
 
 import java.util.ArrayList;
@@ -41,5 +39,27 @@ public class Utils {
         directoryTree.generateTreeFromDirectoryData();
 
         return directoryTree;
+    }
+
+    /**
+     * Gets the UML signature of a PsiClass
+     *
+     * @param psiClass
+     *
+     * @return
+     */
+    public static UmlClassType getPsiClassUmlType(PsiClass psiClass) {
+        if (psiClass.isEnum()) {
+            return UmlClassType.ENUM;
+        }
+        else if (psiClass.isInterface()) {
+            return UmlClassType.INTERFACE;
+        }
+        else if (psiClass.hasModifier(JvmModifier.ABSTRACT)) {
+            return UmlClassType.ABSTRACT_CLASS;
+        }
+        else {
+            return UmlClassType.BASIC_CLASS;
+        }
     }
 }
