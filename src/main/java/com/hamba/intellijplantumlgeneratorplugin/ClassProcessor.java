@@ -70,16 +70,18 @@ public class ClassProcessor implements Processor<PsiClass> {
         return allInterfaces;
     }
 
-    public Map<PsiClass, PsiClass> generateInheritances() {
+    public Map<PsiClass, List<PsiClass>> generateInheritances() {
         // stores the set of relationships between each class and other classes
-        Map<PsiClass, PsiClass> allInheritances = new HashMap<>();
+        Map<PsiClass, List<PsiClass>> allInheritances = new HashMap<>();
 
         // iterate through each class in the project
         for (PsiClass currentClass : allClasses) {
             // stores the set of relationships between the current class being processed and other classes
-            PsiClass inheritances = processInheritances(currentClass);
+            PsiClass inheritance = processInheritances(currentClass);
 
-            if (inheritances != null) {
+            if (inheritance != null) {
+                List<PsiClass> inheritances = new ArrayList<>();
+                inheritances.add(inheritance);
                 allInheritances.put(currentClass, inheritances);
             }
         }

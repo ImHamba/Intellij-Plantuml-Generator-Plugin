@@ -30,10 +30,16 @@ public class GenerateUmlAction extends AnAction {
 
         // searches for classes with '' prefix (i.e. all classes) in the project and runs class processor on them
         AllClassesGetter.processJavaClasses(
-            new PlainPrefixMatcher(""),
-            project,
-            GlobalSearchScope.projectScope(project),
-            processor);
+                new PlainPrefixMatcher(""),
+                project,
+                GlobalSearchScope.projectScope(project),
+                processor);
+
+        Map<PsiClass, List<PsiClass>> allInheritances = processor.generateInheritances();
+        Map<PsiClass, List<PsiClass>> allInterfaces = processor.generateInterfaces();
+        Map<PsiClass, List<PsiClass>> allAssociations = processor.generateAssociations();
+
+        int a = 1;
     }
 
     @Override
