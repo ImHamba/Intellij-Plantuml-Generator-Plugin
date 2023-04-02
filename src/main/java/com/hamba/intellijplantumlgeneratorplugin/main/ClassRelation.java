@@ -6,17 +6,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClassRelation {
-    private PsiClass dependent;
-    private List<PsiClass> dependencies;
+    private PsiClass dependentClass;
+    private List<PsiClass> dependencyClasses;
 
-    public ClassRelation(PsiClass dependent, List<PsiClass> dependencies) {
-        this.dependent = dependent;
-        this.dependencies = dependencies;
+    public ClassRelation(PsiClass dependentClass, List<PsiClass> dependencyClasses) {
+        this.dependentClass = dependentClass;
+        this.dependencyClasses = dependencyClasses;
     }
 
-    public ClassRelation(PsiClass dependent) {
-        this.dependent = dependent;
-        this.dependencies = new ArrayList<>();
+    public ClassRelation(PsiClass dependentClass) {
+        this.dependentClass = dependentClass;
+        this.dependencyClasses = new ArrayList<>();
     }
 
+    public PsiClass getDependentClass() {
+        return dependentClass;
+    }
+
+    public List<PsiClass> getDependencyClasses() {
+        return dependencyClasses;
+    }
 }
