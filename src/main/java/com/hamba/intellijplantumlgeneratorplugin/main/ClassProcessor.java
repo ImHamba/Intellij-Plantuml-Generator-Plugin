@@ -98,18 +98,27 @@ public class ClassProcessor implements Processor<PsiClass> {
         // iterate through each attribute in this class
         for (PsiField field : allFields) {
             PsiClass fieldClass = PsiUtil.resolveClassInClassTypeOnly(field.getType());
-            associations.add(fieldClass);
+            if (allClasses.contains(fieldClass)) {
+                associations.add(fieldClass);
+            }
         }
 
         return associations;
     }
 
     public List<PsiClass> processInterfaces(PsiClass currentClass) {
+        List<PsiClass> interfaceClasses = new ArrayList<>();
+
         // get array of all interfaces of current class
         PsiClass[] interfaceArray = currentClass.getInterfaces();
 
-        // convert array to list
-        return Arrays.asList(interfaceArray);
+        for (PsiClass interfaceClass : interfaceArray) {
+            if (allClasses.contains(interfaceClass)) {
+                interfaceClasses.add(interfaceClass);
+            }
+        }
+
+        return interfaceClasses;
     }
 
     public List<PsiClass> processDependencies(PsiClass currentClass) {
