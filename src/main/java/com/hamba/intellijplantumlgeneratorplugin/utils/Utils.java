@@ -1,11 +1,16 @@
 package com.hamba.intellijplantumlgeneratorplugin.utils;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
-import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.PsiManager;
+import com.intellij.util.containers.ContainerUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
 
@@ -14,5 +19,27 @@ public class Utils {
         final PsiFile file = factory.createFileFromText(fileName + "." + fileExtension, fileContent);
 
         project.getBasePath();
+    }
+
+    public static DirectoryTreeNode generateDirectoryTree(Project project) {
+        final List<VirtualFile> sourceRoots = new ArrayList<>();
+        final ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
+
+        // get all source roots of the project
+        ContainerUtil.addAll(sourceRoots, projectRootManager.getContentSourceRoots());
+
+        final PsiManager psiManager = PsiManager.getInstance(project);
+
+        // get source root directory
+        // assumes a single source root in the project
+        final PsiDirectory sourceDirectory = psiManager.findDirectory(sourceRoots.get(0));
+
+        // initialise package tree
+        DirectoryTreeNode directoryTree = new DirectoryTreeNode(sourceDirectory, null);
+
+        // fill out the tree with all directories and classes in the structure
+        directoryTree.generateTreeFromDirectoryData();
+
+        return directoryTree;
     }
 }

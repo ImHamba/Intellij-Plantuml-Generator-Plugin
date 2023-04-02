@@ -1,18 +1,20 @@
 package com.hamba.intellijplantumlgeneratorplugin.utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TreeNode {
-    private List<TreeNode> children;
+public class TreeNode<T> {
+    protected List<TreeNode> children = new ArrayList<>();
 
-    private String name;
+    protected T data;
     private TreeNode parent;
-    public TreeNode(String name, TreeNode parent) {
-        this.name = name;
+
+    public TreeNode(T data, TreeNode parent) {
+        this.data = data;
         this.parent = parent;
     }
 
-    public void addChild(TreeNode newChild) {
+    public void addChild(TreeNode<T> newChild) {
         children.add(newChild);
     }
 
@@ -20,4 +22,7 @@ public class TreeNode {
         return children;
     }
 
+    public T getData() {
+        return data;
+    }
 }
