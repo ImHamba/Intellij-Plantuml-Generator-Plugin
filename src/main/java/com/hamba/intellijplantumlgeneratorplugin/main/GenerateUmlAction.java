@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static com.hamba.intellijplantumlgeneratorplugin.main.UmlGenerator.generateUmlClassDiagramSyntax;
 import static com.hamba.intellijplantumlgeneratorplugin.main.UmlGenerator.generateUmlRelationshipSyntax;
+import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.createNewFile;
 import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.generateDirectoryTree;
 
 public class GenerateUmlAction extends AnAction {
@@ -49,9 +50,12 @@ public class GenerateUmlAction extends AnAction {
 
         DirectoryTreeNode directoryTree = generateDirectoryTree(project);
 
-        String classDiagramUml = generateUmlClassDiagramSyntax(directoryTree);
+        String classAndPackageUml = generateUmlClassDiagramSyntax(directoryTree);
 
-        System.out.println(classDiagramUml);
+        // add starting syntax
+        String fullDiagramUml = "@startuml\n" + classAndPackageUml + "\n" + allRelationsUml + "\n@enduml";
+
+        createNewFile(project.getBasePath(), "umlDiagram", "puml", fullDiagramUml);
 
         int a = 1;
     }
