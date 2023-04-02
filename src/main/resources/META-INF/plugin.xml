@@ -31,8 +31,8 @@
 
     <actions>
 
-        <action id="com.hamba.intellijplantumlgeneratorplugin.GenerateUmlAction"
-                class="com.hamba.intellijplantumlgeneratorplugin.GenerateUmlAction"
+        <action id="com.hamba.intellijplantumlgeneratorplugin.main.GenerateUmlAction"
+                class="com.hamba.intellijplantumlgeneratorplugin.main.GenerateUmlAction"
                 text="Generate PlantUML class diagram"
                 description="generates PlantUML class diagram syntax from Java class structure">
             <add-to-group group-id="ToolsMenu" anchor="last"/>

@@ -1,4 +1,4 @@
-package com.hamba.intellijplantumlgeneratorplugin;
+package com.hamba.intellijplantumlgeneratorplugin.main;
 
 import com.intellij.psi.PsiClass;
 

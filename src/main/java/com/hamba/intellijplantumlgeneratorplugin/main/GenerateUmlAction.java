@@ -1,4 +1,4 @@
-package com.hamba.intellijplantumlgeneratorplugin;
+package com.hamba.intellijplantumlgeneratorplugin.main;
 
 import com.intellij.codeInsight.completion.AllClassesGetter;
 import com.intellij.codeInsight.completion.PlainPrefixMatcher;
@@ -7,7 +7,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.PsiClass;
 
 import java.util.List;
 import java.util.Map;
