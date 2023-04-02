@@ -18,9 +18,9 @@ public class ClassProcessor implements Processor<PsiClass> {
         return true;
     }
 
-    public Map<PsiClass, List<PsiClass>> generateAssociations() {
+    public List<ClassRelation> generateAssociations() {
         // stores the set of relationships between each class and other classes
-        Map<PsiClass, List<PsiClass>> allAssociations = new HashMap<>();
+        List<ClassRelation> allAssociations = new ArrayList<>();
 
         // iterate through each class in the project
         for (PsiClass currentClass : allClasses) {
@@ -29,16 +29,16 @@ public class ClassProcessor implements Processor<PsiClass> {
 
             // add current class relationships to maps holding all relationships
             if (associations.size() > 0) {
-                allAssociations.put(currentClass, associations);
+                allAssociations.add(new ClassRelation(currentClass, associations));
             }
         }
 
         return allAssociations;
     }
 
-    public Map<PsiClass, List<PsiClass>> generateDependencies() {
+    public List<ClassRelation> generateDependencies() {
         // stores the set of relationships between each class and other classes
-        Map<PsiClass, List<PsiClass>> allDependencies = new HashMap<>();
+        List<ClassRelation> allDependencies = new ArrayList<>();
 
         // iterate through each class in the project
         for (PsiClass currentClass : allClasses) {
@@ -46,16 +46,16 @@ public class ClassProcessor implements Processor<PsiClass> {
             List<PsiClass> dependencies = processDependencies(currentClass);
 
             if (dependencies.size() > 0) {
-                allDependencies.put(currentClass, dependencies);
+                allDependencies.add(new ClassRelation(currentClass, dependencies));
             }
         }
 
         return allDependencies;
     }
 
-    public Map<PsiClass, List<PsiClass>> generateInterfaces() {
+    public List<ClassRelation> generateInterfaces() {
         // stores the set of relationships between each class and other classes
-        Map<PsiClass, List<PsiClass>> allInterfaces = new HashMap<>();
+        List<ClassRelation> allInterfaces = new ArrayList<>();
 
         // iterate through each class in the project
         for (PsiClass currentClass : allClasses) {
@@ -63,16 +63,16 @@ public class ClassProcessor implements Processor<PsiClass> {
             List<PsiClass> interfaces = processInterfaces(currentClass);
 
             if (interfaces.size() > 0) {
-                allInterfaces.put(currentClass, interfaces);
+                allInterfaces.add(new ClassRelation(currentClass, interfaces));
             }
         }
 
         return allInterfaces;
     }
 
-    public Map<PsiClass, List<PsiClass>> generateInheritances() {
+    public List<ClassRelation> generateInheritances() {
         // stores the set of relationships between each class and other classes
-        Map<PsiClass, List<PsiClass>> allInheritances = new HashMap<>();
+        List<ClassRelation> allInheritances = new ArrayList<>();
 
         // iterate through each class in the project
         for (PsiClass currentClass : allClasses) {
@@ -82,7 +82,7 @@ public class ClassProcessor implements Processor<PsiClass> {
             if (inheritance != null) {
                 List<PsiClass> inheritances = new ArrayList<>();
                 inheritances.add(inheritance);
-                allInheritances.put(currentClass, inheritances);
+                allInheritances.add(new ClassRelation(currentClass, inheritances));
             }
         }
 
