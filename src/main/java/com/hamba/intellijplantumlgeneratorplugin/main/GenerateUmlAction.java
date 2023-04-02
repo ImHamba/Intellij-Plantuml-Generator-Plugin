@@ -8,8 +8,12 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.search.GlobalSearchScope;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import static com.hamba.intellijplantumlgeneratorplugin.main.UmlGenerator.generateUmlRelationshipSyntax;
 
 public class GenerateUmlAction extends AnAction {
     Map<PsiType, List<PsiType>> associations;
@@ -29,9 +33,17 @@ public class GenerateUmlAction extends AnAction {
                 GlobalSearchScope.projectScope(project),
                 processor);
 
+        List<ClassRelation> allDependencies = processor.generateDependencies();
+        List<ClassRelation> allAssociations = processor.generateAssociations();
         List<ClassRelation> allInheritances = processor.generateInheritances();
         List<ClassRelation> allInterfaces = processor.generateInterfaces();
-        List<ClassRelation> allAssociations = processor.generateAssociations();
+
+        String dependenciesUml = generateUmlRelationshipSyntax(allDependencies, "..>");
+        String associationsUml = generateUmlRelationshipSyntax(allAssociations, "-->");
+        String inheritancesUml = generateUmlRelationshipSyntax(allInheritances, "--|>");
+        String interfacesUml = generateUmlRelationshipSyntax(allInterfaces, "..|>");
+
+        String allRelationsUml = String.join("\n\n", Arrays.asList(dependenciesUml, associationsUml, inheritancesUml, interfacesUml));
 
         int a = 1;
     }

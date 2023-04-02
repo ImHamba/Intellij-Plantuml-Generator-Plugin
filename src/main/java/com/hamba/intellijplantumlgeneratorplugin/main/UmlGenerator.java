@@ -12,7 +12,7 @@ public class UmlGenerator {
      *
      * @return
      */
-    static String umlRelationshipSyntaxGenerator(List<ClassRelation> classRelationships, String umlRelationSymbol) {
+    static String generateUmlRelationshipSyntax(List<ClassRelation> classRelationships, String umlRelationSymbol) {
         List<String> relationsList = new ArrayList<>();
 
         // iterate through class relations
