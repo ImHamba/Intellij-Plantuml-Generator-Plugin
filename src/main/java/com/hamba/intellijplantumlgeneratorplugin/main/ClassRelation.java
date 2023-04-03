@@ -19,6 +19,19 @@ public class ClassRelation {
         this.dependencyClasses = new ArrayList<>();
     }
 
+    /**
+     * checks if this class relation contains a relationship between the dependent class and a specified dependency
+     * class
+     *
+     * @param checkDependentClass
+     * @param checkDependencyClass
+     *
+     * @return
+     */
+    public boolean hasRelation(PsiClass checkDependentClass, PsiClass checkDependencyClass) {
+        return dependentClass == checkDependentClass && dependencyClasses.contains(checkDependencyClass);
+    }
+
     public PsiClass getDependentClass() {
         return dependentClass;
     }
