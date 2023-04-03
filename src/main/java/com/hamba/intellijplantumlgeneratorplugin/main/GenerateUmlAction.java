@@ -15,8 +15,7 @@ import java.util.Map;
 
 import static com.hamba.intellijplantumlgeneratorplugin.main.UmlGenerator.generateUmlClassDiagramSyntax;
 import static com.hamba.intellijplantumlgeneratorplugin.main.UmlGenerator.generateUmlRelationshipSyntax;
-import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.createNewFile;
-import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.generateDirectoryTree;
+import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.*;
 
 public class GenerateUmlAction extends AnAction {
     Map<PsiType, List<PsiType>> associations;
@@ -36,10 +35,11 @@ public class GenerateUmlAction extends AnAction {
                 GlobalSearchScope.projectScope(project),
                 processor);
 
-        List<ClassRelation> allDependencies = processor.generateDependencies();
         List<ClassRelation> allAssociations = processor.generateAssociations();
         List<ClassRelation> allInheritances = processor.generateInheritances();
         List<ClassRelation> allInterfaces = processor.generateInterfaces();
+        List<ClassRelation> nonDependecyRelations = concatenateLists(allAssociations, allInterfaces, allInheritances);
+        List<ClassRelation> allDependencies = processor.generateDependencies(nonDependecyRelations);
 
         String dependenciesUml = generateUmlRelationshipSyntax(allDependencies, "..>");
         String associationsUml = generateUmlRelationshipSyntax(allAssociations, "-->");
@@ -53,7 +53,7 @@ public class GenerateUmlAction extends AnAction {
         String classAndPackageUml = generateUmlClassDiagramSyntax(directoryTree);
 
         // add starting syntax
-        String fullDiagramUml = "@startuml\n" + classAndPackageUml + "\n" + allRelationsUml + "\n@enduml";
+        String fullDiagramUml = "@startuml\nskinparam linetype ortho\n" + classAndPackageUml + "\n" + allRelationsUml + "\n@enduml";
 
         createNewFile(project.getBasePath(), "umlDiagram", "puml", fullDiagramUml);
 

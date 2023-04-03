@@ -8,6 +8,9 @@ import com.intellij.util.Processor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.classRelationListContains;
+import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.getAllVariableTypes;
+
 public class ClassProcessor implements Processor<PsiClass> {
 
     private List<PsiClass> allClasses = new ArrayList<>();
@@ -37,14 +40,14 @@ public class ClassProcessor implements Processor<PsiClass> {
         return allAssociations;
     }
 
-    public List<ClassRelation> generateDependencies() {
+    public List<ClassRelation> generateDependencies(List<ClassRelation> otherRelations) {
         // stores the set of relationships between each class and other classes
         List<ClassRelation> allDependencies = new ArrayList<>();
 
         // iterate through each class in the project
         for (PsiClass currentClass : allClasses) {
             // stores the set of relationships between the current class being processed and other classes
-            List<PsiClass> dependencies = processDependencies(currentClass);
+            List<PsiClass> dependencies = processDependencies(currentClass, otherRelations);
 
             if (dependencies.size() > 0) {
                 allDependencies.add(new ClassRelation(currentClass, dependencies));
@@ -122,9 +125,24 @@ public class ClassProcessor implements Processor<PsiClass> {
         return interfaceClasses;
     }
 
-    public List<PsiClass> processDependencies(PsiClass currentClass) {
-        // TODO: implement this
-        return new ArrayList<>();
+    public List<PsiClass> processDependencies(PsiClass currentClass, List<ClassRelation> otherRelations) {
+        List<PsiClass> dependencyClasses = new ArrayList<>();
+
+        List<PsiClass> variableTypes = getAllVariableTypes(currentClass);
+
+        for (PsiClass dependencyClass : variableTypes) {
+            // go to next variable type if the current variable type is not part of the project, or it is the current class (i.e. pointing to itself)
+            if (!allClasses.contains(dependencyClass) || dependencyClass == currentClass) {
+                continue;
+            }
+
+            // ensure the dependency does not already exist redundantly in a different relation type (e.g. association) to avoid doubling up with a dependency relation in the uml diagram
+            if (!classRelationListContains(otherRelations, currentClass, dependencyClass)) {
+                dependencyClasses.add(dependencyClass);
+            }
+        }
+
+        return dependencyClasses;
     }
 
     public PsiClass processInheritances(PsiClass currentClass) {
