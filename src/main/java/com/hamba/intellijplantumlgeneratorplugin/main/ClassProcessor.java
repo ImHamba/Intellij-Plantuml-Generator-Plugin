@@ -5,7 +5,8 @@ import com.intellij.psi.PsiField;
 import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Processor;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClassProcessor implements Processor<PsiClass> {
 
@@ -98,7 +99,7 @@ public class ClassProcessor implements Processor<PsiClass> {
         // iterate through each attribute in this class
         for (PsiField field : allFields) {
             PsiClass fieldClass = PsiUtil.resolveClassInClassTypeOnly(field.getType());
-            if (allClasses.contains(fieldClass)) {
+            if (allClasses.contains(fieldClass) && fieldClass != currentClass) {
                 associations.add(fieldClass);
             }
         }
@@ -113,7 +114,7 @@ public class ClassProcessor implements Processor<PsiClass> {
         PsiClass[] interfaceArray = currentClass.getInterfaces();
 
         for (PsiClass interfaceClass : interfaceArray) {
-            if (allClasses.contains(interfaceClass)) {
+            if (allClasses.contains(interfaceClass) && interfaceClass != currentClass) {
                 interfaceClasses.add(interfaceClass);
             }
         }
@@ -131,7 +132,7 @@ public class ClassProcessor implements Processor<PsiClass> {
         // returns null if current class does not extend anything
         PsiClass parent = currentClass.getSuperClass();
 
-        if (allClasses.contains(parent)) {
+        if (allClasses.contains(parent) && parent != currentClass) {
             return parent;
         }
 
