@@ -2,14 +2,12 @@ package com.hamba.intellijplantumlgeneratorplugin.main;
 
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiField;
-import com.intellij.psi.util.PsiUtil;
 import com.intellij.util.Processor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.classRelationListContains;
-import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.getAllVariableTypes;
+import static com.hamba.intellijplantumlgeneratorplugin.utils.Utils.*;
 
 public class ClassProcessor implements Processor<PsiClass> {
 
@@ -101,7 +99,8 @@ public class ClassProcessor implements Processor<PsiClass> {
 
         // iterate through each attribute in this class
         for (PsiField field : allFields) {
-            PsiClass fieldClass = PsiUtil.resolveClassInClassTypeOnly(field.getType());
+            PsiClass fieldClass = convertPsiVariableToPsiClassType(field);
+
             if (allClasses.contains(fieldClass) && fieldClass != currentClass) {
                 associations.add(fieldClass);
             }

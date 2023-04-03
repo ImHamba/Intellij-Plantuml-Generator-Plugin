@@ -111,7 +111,8 @@ public class Utils {
 
         // convert each variable to its data type PsiClass
         for (PsiElement psiVar : variablesArray) {
-            variablesTypeList.add(PsiUtil.resolveClassInClassTypeOnly(((PsiVariable) psiVar).getType()));
+            PsiClass psiVarType = convertPsiVariableToPsiClassType((PsiVariable) psiVar);
+            variablesTypeList.add(psiVarType);
         }
 
         return variablesTypeList;
@@ -144,5 +145,36 @@ public class Utils {
         }
 
         return concatenatedLists;
+    }
+
+    /**
+     * Converts a PsiVariable into the PsiClass representing the data type of the variable. Extracts types out of
+     * iterables and returns null for primitive types
+     *
+     * @param psiVariable
+     *
+     * @return
+     */
+    public static PsiClass convertPsiVariableToPsiClassType(PsiVariable psiVariable) {
+        PsiClass variableClass;
+
+        // first assume field is an iterable (e.g. a list) holding a type, attempt to extract this type
+        variableClass = PsiUtil.resolveClassInClassTypeOnly(
+                PsiUtil.extractIterableTypeParameter(psiVariable.getType(), false)
+        );
+
+        // if field was not an iterable, the extracted type will be null
+        // in this case, convert the field type directly to a class (works for either standalone types or arrays of types)
+        try {
+            if (variableClass == null) {
+                variableClass = (PsiClass) psiVariable.getTypeElement().getInnermostComponentReferenceElement().resolve();
+            }
+        }
+        // if type is primitive, the above will throw an error
+        catch (NullPointerException e) {
+            return null;
+        }
+
+        return variableClass;
     }
 }
