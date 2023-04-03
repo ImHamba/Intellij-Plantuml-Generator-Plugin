@@ -42,9 +42,9 @@ public class GenerateUmlAction extends AnAction {
         List<ClassRelation> allDependencies = processor.generateDependencies(nonDependecyRelations);
 
         String dependenciesUml = generateUmlRelationshipSyntax(allDependencies, "..>");
-        String associationsUml = generateUmlRelationshipSyntax(allAssociations, "-->");
-        String inheritancesUml = generateUmlRelationshipSyntax(allInheritances, "--|>");
-        String interfacesUml = generateUmlRelationshipSyntax(allInterfaces, "..|>");
+        String associationsUml = generateUmlRelationshipSyntax(allAssociations, "-[#red]->");
+        String inheritancesUml = generateUmlRelationshipSyntax(allInheritances, "-[#blue]-|>");
+        String interfacesUml = generateUmlRelationshipSyntax(allInterfaces, ".[#green].|>");
 
         String allRelationsUml = String.join("\n\n", Arrays.asList(dependenciesUml, associationsUml, inheritancesUml, interfacesUml));
 

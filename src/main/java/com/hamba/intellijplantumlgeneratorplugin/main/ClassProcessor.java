@@ -127,16 +127,24 @@ public class ClassProcessor implements Processor<PsiClass> {
     public List<PsiClass> processDependencies(PsiClass currentClass, List<ClassRelation> otherRelations) {
         List<PsiClass> dependencyClasses = new ArrayList<>();
 
+        // variable data type classes
         List<PsiClass> variableTypes = getAllVariableTypes(currentClass);
+        // classes that called methods belong to
+        List<PsiClass> methodCallClasses = getAllMethodCallClasses(currentClass);
+        // classes that called constructors belong to
+        List<PsiClass> constructorCallClasses = getAllConstructorCallClasses(currentClass);
+        List<PsiClass> allDependentClasses = concatenateLists(variableTypes, methodCallClasses, constructorCallClasses);
 
-        for (PsiClass dependencyClass : variableTypes) {
-            // go to next variable type if the current variable type is not part of the project, or it is the current class (i.e. pointing to itself)
+        for (PsiClass dependencyClass : allDependentClasses) {
+            // if the current dependency class is not part of the project, or is the current class (i.e. pointing to itself) go to next
             if (!allClasses.contains(dependencyClass) || dependencyClass == currentClass) {
                 continue;
             }
 
             // ensure the dependency does not already exist redundantly in a different relation type (e.g. association) to avoid doubling up with a dependency relation in the uml diagram
-            if (!classRelationListContains(otherRelations, currentClass, dependencyClass)) {
+            // also check that the current list does not already contain this class, to avoid duplicate items
+            if (!dependencyClasses.contains(dependencyClass) &&
+                    !classRelationListContains(otherRelations, currentClass, dependencyClass)) {
                 dependencyClasses.add(dependencyClass);
             }
         }
@@ -154,5 +162,9 @@ public class ClassProcessor implements Processor<PsiClass> {
         }
 
         return null;
+    }
+
+    public List<PsiClass> getAllClasses() {
+        return allClasses;
     }
 }

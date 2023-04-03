@@ -118,6 +118,44 @@ public class Utils {
         return variablesTypeList;
     }
 
+    public static List<PsiClass> getAllMethodCallClasses(PsiClass psiClass) {
+        PsiElement[] methodCallsArray = PsiTreeUtil.collectElements(psiClass, new PsiElementFilter() {
+            public boolean isAccepted(PsiElement e) {
+                if (e instanceof PsiMethodCallExpression) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        List<PsiClass> methodCallClasses = new ArrayList<>();
+        for (PsiElement methodCall : methodCallsArray) {
+            PsiClass methodCallClass = ((PsiMethodCallExpression) methodCall).resolveMethod().getContainingClass();
+            methodCallClasses.add(methodCallClass);
+        }
+
+        return methodCallClasses;
+    }
+
+    public static List<PsiClass> getAllConstructorCallClasses(PsiClass psiClass) {
+        PsiElement[] constructorCallsArray = PsiTreeUtil.collectElements(psiClass, new PsiElementFilter() {
+            public boolean isAccepted(PsiElement e) {
+                if (e instanceof PsiConstructorCall && !(e instanceof PsiEnumConstant)) {
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        List<PsiClass> constructorCallClasses = new ArrayList<>();
+        for (PsiElement constructorCall : constructorCallsArray) {
+            PsiClass constructorCallClass = ((PsiConstructorCall) constructorCall).resolveMethod().getContainingClass();
+            constructorCallClasses.add(constructorCallClass);
+        }
+
+        return constructorCallClasses;
+    }
+
     /**
      * Checks if a list of ClassRelations contains a relationship between two particular classes.
      *
